@@ -8,7 +8,7 @@ Polynomiography tools
 
 The Polynomiography app provides an interface to generate polynomiographs, based on user-defined parameters. For simplicity, all fields display default values when the app is launched.
 
-To launch the app, run the file RUN.sh. The app can also be directly launched by running PolynomiographyGUI.pyw within a Python interpreter. A Python 3 installation with Numpy and Matplotlib is required.
+The GUI can be directly launched by running PolynomiographyGUI.pyw from within a Python interpreter. A Python 3 installation with Numpy and Matplotlib is required.
 
 *PARAMETERS
 
@@ -52,6 +52,19 @@ for a fixed value of m, starting from a given point a_0.
 
 4 - Reset: reset all fields to default values.
 
+*ERROR CODES
+Bad input:
+1 - invalid input for the parameter m;
+2 - invalid input for the parameter n;
+3 - invalid input for the parameter step;
+4 - invalid input for the parameter xmin;
+5 - invalid input for the parameter xmax;
+6 - invalid input for the parameter ymin;
+7 - invalid input for the parameter ymax;
+8 - invalid input for the roots entry box;
+9 - invalid input for the coefficients entry box;
+10 - value of parameter m is less than 2;
+11 - value of parameter 0 is less than 1.
 
 *ISSUES
 -Plotting the basins of attraction may take several minutes if the value of 'step' parameter is too small.
