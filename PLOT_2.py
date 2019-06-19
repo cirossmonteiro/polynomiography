@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import math
 import numpy as np
 import time
-import POLYNOMIOGRAPHY as POLY
+import POLYNOMIOGRAPHY_2 as POLY
 
 #########################################################################
 

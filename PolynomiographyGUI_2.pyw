@@ -1,5 +1,5 @@
 from tkinter import *
-import PLOT
+import PLOT_2
 import time
 
 class App:
