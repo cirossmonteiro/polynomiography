@@ -23,6 +23,8 @@ export const complexSum = (x: Complex, y: Complex) => new Complex(x.a+y.a, x.b+y
 
 export const complexProduct = (x: Complex, y: Complex) => new Complex(x.a*y.a, -x.b*y.b);
 
+export const complexDivision = (x: Complex, y: Complex) => complexProduct(x, y.inverse());
+
 export const complexSub = (x: Complex, y: Complex) =>
     complexSum(x, complexProduct(y, new Complex(-1,0)));
 
