@@ -4,6 +4,7 @@ import './App.css';
 import { Matrix, matrixPrint, matrixSum, matrixProduct, matrixIntPow } from './matrix';
 import { Complex } from './complex';
 import { Polynomial } from './polynomial';
+import Graphics from './graphics';
 
 class App extends React.Component {
 
@@ -17,6 +18,7 @@ class App extends React.Component {
                 {matrixPrint(matrixIntPow(m,200))}
                 {p.print()}<br />
                 {p.derivate().print()}
+                <Graphics />
             </div>
         );
     }

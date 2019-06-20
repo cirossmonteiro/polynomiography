@@ -22,7 +22,7 @@ export class Complex {
         if (this.a != 0)
             str += this.a;
         if (this.b != 0) {
-            if (this.b > 0)
+            if (this.a && this.b > 0)
                 str += ' + ';
             str += this.b + 'i';
         }
@@ -31,11 +31,19 @@ export class Complex {
         return str;
     }
 
+    // a,b are scaling parameters
+    //rgb = (a = 10, b = 10) => [this.a/a+a/2, this.b/b+b/2, 100];
+    rgb = (a: number, b: number) => [this.a*a, this.b*b, 100];
+
 };
+
+export const one = new Complex(1,0);
+
+export const zero = new Complex(0,0);
 
 export const complexSum = (x: Complex, y: Complex) => new Complex(x.a+y.a, x.b+y.b);
 
-export const complexProduct = (x: Complex, y: Complex) => new Complex(x.a*y.a, -x.b*y.b);
+export const complexProduct = (x: Complex, y: Complex) => new Complex(x.a*y.a-x.b*y.b, x.b*y.a+x.a*y.b);
 
 export const complexDivision = (x: Complex, y: Complex) => complexProduct(x, y.inverse());
 
@@ -43,6 +51,8 @@ export const complexSub = (x: Complex, y: Complex) =>
     complexSum(x, complexProduct(y, new Complex(-1,0)));
 
 export const complexIntPow = (x: Complex, n: number) => {
+    if (x.a == 0 && x.b == 0)
+        return x;
     if(n == 0)
         return new Complex(1,0);
     let z = x;
