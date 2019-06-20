@@ -43,3 +43,26 @@ export const B = (m: number, f: Polynomial, x: Complex) => {
     return complexSub(x, complexProduct(f.compute(x) as Complex, complexDivision(d2, d1)));
 };
 
+export const BasicSeq = (f: Polynomial, a: Complex, n: number) => {
+    let L = [a];
+    for(let m = 2; m < n; m++)
+        L.push(B(m, f, a));
+    return L;
+};
+
+export const orbit = (f: Polynomial, m: number, a: Complex, n: number) => {
+    let L = [a], x = a;
+    for (let i = 0; i < n; i++) {
+        x = B(m, f, x);
+        L.push(B(m,f,x));
+    }
+    return L;
+};
+
+export const printOrbit = (f: Polynomial, m: number, a: Complex, n: number) => {
+    let L = orbit(f, m, a, n);
+    for (let i = 0; i < L.length; i++) {
+        const real = L[i].a, imag = L[i].b;
+        console.log(Math.floor(100*2**real)%256, Math.floor(100*2**imag)%256);
+    }
+};
