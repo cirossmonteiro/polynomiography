@@ -1,0 +1,1 @@
+export const zeros = (num: number) => Array.from(Array(num),() => 0);
