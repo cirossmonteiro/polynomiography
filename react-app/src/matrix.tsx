@@ -20,16 +20,41 @@ export class Matrix {
             this.matrix = zeros(m).map(() => zeros(n));
     }
 
-    setTemp = (mat: any[][]) => {
+    setArray = (mat: any[][]) => {
         this.m = mat.length;
         this.n = mat[0].length;
         return this.matrix = mat.slice(0).map(row => row.slice(0));
     }
 
     set = (i: number, j: number, e: any) => this.matrix[i][j] = e;
+
     get = (i: number, j: number) => this.matrix[i][j];
 
+    subMatrix = (i: number, j: number) => {
+        let ret = new Matrix(this.matrix[0][0].name, this.m);
+        ret.matrix = this.matrix
+        .map(row => row.filter((v, ind) => ind != j))
+        .filter((v,ind) => ind != i);
+        return ret;
+    }
+
 };
+
+export const determinant = (m1: Matrix) => {
+    if (m1.m == 1)
+        return m1.get(0,0);
+    let s = new Complex(0,0);
+    for (let ind = 0; ind < m1.m; ind++) {
+        const subm = m1.subMatrix(0, ind);
+        const detm = determinant(subm);
+        s = complexSum(s, complexProduct(complexProduct(detm,m1.get(0,ind)),new Complex((-1)**ind,0)))
+    }
+}
+    /* (m1.m == 1 ? m1.get(0,0) : 
+        m1.matrix[0].reduce(
+            (ac, v, ind) => complexProduct(complexProduct(determinant(m1.subMatrix(0, ind)),v),(-1)**ind),
+        0)
+    ); */
 
 export const MatrixZero = (type: string, n: number) => {
     let matrix = new Matrix(type, n,n);
