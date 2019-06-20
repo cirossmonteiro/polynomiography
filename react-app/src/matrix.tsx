@@ -1,4 +1,5 @@
-import { Complex, complexSum, complexProduct } from "./complex";
+import React from 'react';
+import { Complex, complexSum, complexProduct, complexPrint } from "./complex";
 import { zeros } from "./utils";
 
 export class Matrix {
@@ -9,8 +10,12 @@ export class Matrix {
     n: number;
 
     constructor(type: string, m: number, n: number) {
+        this.m = m;
+        this.n = n;
         if (type == 'Complex')
             this.matrix = zeros(m).map(() => zeros(n).map(() => new Complex(0,0)));
+        else
+            this.matrix = zeros(m).map(() => zeros(n));
     }
 
     set = (mat: any[][]) => {
@@ -65,7 +70,7 @@ export const matrixSub = (m1: Matrix, m2: Matrix) => {
 
 export const matrixProduct = (m1: Matrix, m2: Matrix) => {
     if (m1.n != m2.m)
-        throw TypeError("Matrices can't be multiplied because of their dimensios.");
+        throw TypeError(`Matrices product can't be computed because of its dimensions: ${m1.n} != ${m2.m}.`);
     const type = m1.matrix[0][0].name;
     let matrix = new Matrix(type, m1.m, m2.n);
     for (let i = 0; i < m1.m; i++)
@@ -73,28 +78,27 @@ export const matrixProduct = (m1: Matrix, m2: Matrix) => {
             for (let k = 0; k < m1.n; k++)
                 if (type == 'Complex')
                     matrix.matrix[i][j] = complexSum(matrix.matrix[i][j],
-                        complexProduct(matrix.matrix[i][k],matrix.matrix[k][j]));
+                        complexProduct(m1.matrix[i][k],m2.matrix[k][j]));
     return matrix;
 };
 
 export const matrixIntPow = (m1: Matrix, n: number) => {
     if (m1.m != m1.n)
-        throw new TypeError("Matrix power can't be computed because of its dimensions.");
+        throw new TypeError(`Matrix power can't be computed because of its dimensions: ${m1.m} != ${m1.n}.`);
     const type = m1.matrix[0][0].name;
-    let matrix = matrixId(type, n);
+    let matrix = matrixId(type, m1.m);
     for (let k = 0; k < n; k++)
         matrix = matrixProduct(matrix, m1);
     return matrix;
 };
 
-export const matrixPrint = (m1: Matrix) => {
+export const matrixPrint = (m1: Matrix): JSX.Element => {
     const type = m1.matrix[0][0].name;
-    const printCell = (cell: Complex) => `${cell.a}+${cell.b}i`;
     return (
-        <div className = "matrix">
+        <div className = "matrix-body">
             {m1.matrix.map(row =>
-                <div className = "row">
-                    {row.map(cell => <div className = "cell">{printCell(cell)}</div>)}
+                <div className = "matrix-row">
+                    {row.map(cell => <div className = "matrix-cell">{complexPrint(cell)}</div>)}
                 </div>
             )}
         </div>

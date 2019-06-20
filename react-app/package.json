@@ -30,7 +30,7 @@
         "create-component": " cd template/component/ && python3 create_component.py"
     },
     "eslintConfig": {
-         "extends": "react-app"
+        "extends": "react-app"
     },
     "browserslist": {
         "production": [

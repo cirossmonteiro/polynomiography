@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Matrix, matrixPrint } from './matrix';
+import { Matrix, matrixPrint, matrixSum, matrixProduct, matrixIntPow } from './matrix';
 import { Complex } from './complex';
 
 class App extends React.Component {
@@ -12,7 +12,7 @@ class App extends React.Component {
         return (
             <div className="App">
                 nothing3
-                {matrixPrint(m)}
+                {matrixPrint(matrixIntPow(m,200))}
             </div>
         );
     }

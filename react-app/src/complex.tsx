@@ -35,3 +35,16 @@ export const complexIntPow = (x: Complex, n: number) => {
     return z;
 };
 
+export const complexPrint = (x: Complex) => {
+    let str = "";
+    if (x.a != 0)
+        str += x.a;
+    if (x.b != 0) {
+        if (x.b > 0)
+            str += ' + ';
+        str += x.b + 'i';
+    }
+    if (str == "")
+        str = "0"
+    return str;
+}

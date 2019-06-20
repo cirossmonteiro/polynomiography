@@ -31,3 +31,20 @@
     transform: rotate(360deg);
   }
 }
+
+.matrix-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.matrix-row {
+    display: flex;
+}
+
+.matrix-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid black;
+}
