@@ -52,3 +52,16 @@ export const HSL2RGB = (h: number, s: number, l: number) => {
     }
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 };
+
+export interface IEvent {
+    target: { 
+        name: string,
+        value: string
+    }
+};
+
+export const handleChange = (event: IEvent, scope: any) => {
+    let safeName: string = event.target.name;
+    let safeValue: string = event.target.value;
+    scope.setState({[safeName]: safeValue});
+};

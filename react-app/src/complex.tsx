@@ -33,7 +33,7 @@ export class Complex {
 
     // a,b are scaling parameters
     //rgb = (a = 10, b = 10) => [this.a/a+a/2, this.b/b+b/2, 100];
-    rgb = (a: number, b: number) => [this.a*a, this.b*b, 100];
+    rgb = (a: number, b: number) => [this.a*a, 0, this.b*b];
 
 };
 
