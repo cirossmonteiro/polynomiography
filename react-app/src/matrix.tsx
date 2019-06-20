@@ -1,5 +1,5 @@
 import React from 'react';
-import { Complex, complexSum, complexProduct, complexPrint } from "./complex";
+import { Complex, complexSum, complexProduct } from "./complex";
 import { zeros } from "./utils";
 
 export class Matrix {
@@ -9,7 +9,9 @@ export class Matrix {
     m: number;
     n: number;
 
-    constructor(type: string, m: number, n: number) {
+    constructor(type: string, m: number, n: number = -1) {
+        if (n == -1)
+            n = m;
         this.m = m;
         this.n = n;
         if (type == 'Complex')
@@ -18,11 +20,14 @@ export class Matrix {
             this.matrix = zeros(m).map(() => zeros(n));
     }
 
-    set = (mat: any[][]) => {
+    setTemp = (mat: any[][]) => {
         this.m = mat.length;
         this.n = mat[0].length;
         return this.matrix = mat.slice(0).map(row => row.slice(0));
     }
+
+    set = (i: number, j: number, e: any) => this.matrix[i][j] = e;
+    get = (i: number, j: number) => this.matrix[i][j];
 
 };
 
@@ -98,7 +103,7 @@ export const matrixPrint = (m1: Matrix): JSX.Element => {
         <div className = "matrix-body">
             {m1.matrix.map(row =>
                 <div className = "matrix-row">
-                    {row.map(cell => <div className = "matrix-cell">{complexPrint(cell)}</div>)}
+                    {row.map(cell => <div className = "matrix-cell">{cell.print()}</div>)}
                 </div>
             )}
         </div>

@@ -34,6 +34,20 @@ export class Polynomial {
             }
             return z;
         }
+        return null;
+    }
+
+    derivate = () => {
+        let v = this.coefficients.slice(0);
+        const g = v.length-1;
+        v.pop();
+        v = v.map((e,i) => complexProduct(e, new Complex(g-i,0)));
+        return new Polynomial(v);
     }
     
+    print = () => {
+        let g = this.coefficients.length-1;
+        return this.coefficients.map((c,i) => `${c.print()}x^${g-i}`).reduce((ac, now) => ac+'+'+now,'');
+    }
+
 };

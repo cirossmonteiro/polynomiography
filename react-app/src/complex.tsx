@@ -17,6 +17,20 @@ export class Complex {
 
     inverse = () => new Complex(this.a/(this.a**2+this.b**2), -this.b/(this.a**2+this.b**2));
 
+    print = () => {
+        let str = "";
+        if (this.a != 0)
+            str += this.a;
+        if (this.b != 0) {
+            if (this.b > 0)
+                str += ' + ';
+            str += this.b + 'i';
+        }
+        if (str == "")
+            str = "0"
+        return str;
+    }
+
 };
 
 export const complexSum = (x: Complex, y: Complex) => new Complex(x.a+y.a, x.b+y.b);
@@ -36,17 +50,3 @@ export const complexIntPow = (x: Complex, n: number) => {
         z = complexProduct(z, x);
     return z;
 };
-
-export const complexPrint = (x: Complex) => {
-    let str = "";
-    if (x.a != 0)
-        str += x.a;
-    if (x.b != 0) {
-        if (x.b > 0)
-            str += ' + ';
-        str += x.b + 'i';
-    }
-    if (str == "")
-        str = "0"
-    return str;
-}
