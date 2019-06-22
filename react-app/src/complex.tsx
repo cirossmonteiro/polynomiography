@@ -60,3 +60,6 @@ export const complexIntPow = (x: Complex, n: number) => {
         z = complexProduct(z, x);
     return z;
 };
+
+export const polygon = (n: number, r: number = 1) => 
+    zeros(n).map((v, i) => new Complex(r*Math.cos(2*Math.PI*i/n), r*Math.sin(2*Math.PI*i/n)));
