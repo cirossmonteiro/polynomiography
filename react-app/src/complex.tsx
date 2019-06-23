@@ -1,4 +1,4 @@
-import { zeros } from "./utils";
+import { zeros, min, max } from "./utils";
 
 export class Complex {
 
@@ -31,10 +31,9 @@ export class Complex {
         return str;
     }
 
-    // a,b are scaling parameters
-    //rgb = (a = 10, b = 10) => [this.a/a+a/2, this.b/b+b/2, 100];
-    //rgb = (axis: [number, number, number, number]) => [(axis[1]-this.a)/(axis[1]-axis[0])*255, 0, (axis[3]-this.b)/(axis[3]-axis[2])*255];
-    rgb = (axis: [number, number, number, number]) => [255/5*(this.a+1),0,255/4*this.b]
+    // axis is given by image
+    rgb = (axis: [number, number, number, number]) =>
+        [(axis[1]-this.a)/(axis[1]-axis[0])*255, 0, (axis[3]-this.b)/(axis[3]-axis[2])*255];
 
 };
 
@@ -66,3 +65,13 @@ export const polygon = (n: number, r: number = 1) =>
     zeros(n).map((v, i) => new Complex(r*Math.cos(2*Math.PI*i/n), r*Math.sin(2*Math.PI*i/n)));
 
 export const complexZeros = (n: number) => zeros(n).map(() => new Complex(0,0));
+
+export const axisComplexDomain = (Z: Complex[][]): [number, number, number, number] => {
+    const onlyReal = Z.map(line => line.map(complex  => complex.a));
+    const minReal = min(onlyReal.reduce((pline,line) => pline.concat(line),[]));
+    const maxReal = max(onlyReal.reduce((pline,line) => pline.concat(line),[]));
+    const onlyImag = Z.map(line => line.map(complex => complex.b));
+    const minImag = min(onlyImag.reduce((pline,line) => pline.concat(line),[]));
+    const maxImag = max(onlyImag.reduce((pline,line) => pline.concat(line),[]));
+    return [minReal, maxReal, minImag, maxImag];
+}

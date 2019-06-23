@@ -1,3 +1,5 @@
+import { Complex } from "./complex";
+
 export const zeros = (num: number) => Array.from(Array(num),() => 0);
 
 
@@ -65,3 +67,7 @@ export const handleChange = (event: IEvent, scope: any) => {
     let safeValue: string = event.target.value;
     scope.setState({[safeName]: safeValue});
 };
+
+export const min = (values: number[]) => values.reduce((p: number, v: number) => ( p < v ? p : v ));
+
+export const max = (values: number[]) => values.reduce((p: number, v: number) => ( p < v ? v : p ));
