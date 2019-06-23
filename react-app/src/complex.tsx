@@ -33,7 +33,8 @@ export class Complex {
 
     // a,b are scaling parameters
     //rgb = (a = 10, b = 10) => [this.a/a+a/2, this.b/b+b/2, 100];
-    rgb = (a: number, b: number) => [this.a*a, 0, this.b*b];
+    //rgb = (axis: [number, number, number, number]) => [(axis[1]-this.a)/(axis[1]-axis[0])*255, 0, (axis[3]-this.b)/(axis[3]-axis[2])*255];
+    rgb = (axis: [number, number, number, number]) => [255/5*(this.a+1),0,255/4*this.b]
 
 };
 
@@ -63,3 +64,5 @@ export const complexIntPow = (x: Complex, n: number) => {
 
 export const polygon = (n: number, r: number = 1) => 
     zeros(n).map((v, i) => new Complex(r*Math.cos(2*Math.PI*i/n), r*Math.sin(2*Math.PI*i/n)));
+
+export const complexZeros = (n: number) => zeros(n).map(() => new Complex(0,0));

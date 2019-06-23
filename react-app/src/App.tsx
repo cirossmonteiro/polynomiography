@@ -30,12 +30,12 @@ class App extends React.Component<IProps, IState> {
         this.state = {
             poly: "[1,0]",
             poly2: [1,0],
-            axis: "[-1,1,-1,1]",
-            axis2: [-1,1,-1,1],
-            thickness: 1,
-            thickness2: 1,
-            dimensions: "[400,400]",
-            dimensions2: [400,400]
+            axis: "[-3,3,-3,3]",
+            axis2: [-3,3,-3,3],
+            thickness: thick,
+            thickness2: thick,
+            dimensions: JSON.stringify(dim),
+            dimensions2: dim
         }
     }
 

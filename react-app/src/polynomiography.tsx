@@ -1,6 +1,6 @@
 import { Matrix, matrixId, determinant } from "./matrix";
 import { Polynomial } from "./polynomial";
-import { Complex, complexProduct, complexDivision, complexSub } from "./complex";
+import { Complex, complexProduct, complexDivision, complexSub, one } from "./complex";
 
 export const D = (m: number, f: Polynomial, x: Complex) => {
     if (m == 1)
@@ -9,22 +9,22 @@ export const D = (m: number, f: Polynomial, x: Complex) => {
     const u = f.compute(x);
     let q = f;
     let h = new Complex(1,0);
-    let i = 1;
+    let i = 0;
     let v;
     while (i < m-2) {
         L.set(i,i+1, u);
         q = q.derivate();
-        h = complexProduct(h, new Complex(i,0));
+        h = complexProduct(h, new Complex(i+1,0));
         v = complexDivision(q.compute(x) as Complex,h);
         for (let j = i; i < m-1; j++)
             L.set(j, j-1, v);
         i++;
     }
     q = q.derivate();
-    h = complexProduct(h, new Complex(i,0));
+    h = complexProduct(h, new Complex(i+1,0));
     v = complexDivision(q.compute(x) as Complex,h);
-    for (let j = i; i < m-1; j++)
-        L.set(j, j-1, v);
+    for (let j = i; j < m-1; j++) // i can be zero
+        L.set(j, (j == 0 ? L.n-1 : j-1), v);
     return L;
 }
 
@@ -34,7 +34,7 @@ export const B = (m: number, f: Polynomial, x: Complex) => {
     let d1 = determinant(B1);
     let d2;
     if (m == 2)
-        d2 = matrixId('Complex', A1.m);
+        d2 = one;
     else {
         let A2 = A1.subMatrix(A1.m, A1.m);
         let B2 = A2;

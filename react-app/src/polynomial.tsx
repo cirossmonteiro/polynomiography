@@ -1,12 +1,21 @@
-import { Complex, complexProduct, complexIntPow, complexSum } from "./complex";
+import { Complex, complexProduct, complexIntPow, complexSum, complexZeros } from "./complex";
 import { MatrixZero, matrixIntPow, matrixProduct, matrixSum, matrixScalar } from "./matrix";
+import { zeros } from "./utils";
 
 export class Polynomial {
 
     coefficients: Complex[];
 
-    constructor(arr: Complex[]) {
-        this.coefficients = arr.slice(0);
+    constructor(coef: Complex[]) {
+        // eliminate excessive zeros
+        this.coefficients = coef.filter((currentValue, index, arr) => 
+            currentValue != new Complex(0,0) || (currentValue == new Complex(0,0) &&
+                !arr.slice(0, index-1).reduce((ac, v) => v != new Complex(0,0), false) && index != arr.length-1)
+        );
+    }
+
+    get degree() {
+        return this.coefficients.length-1;
     }
 
     compute = (x: any) => {
@@ -51,3 +60,15 @@ export class Polynomial {
     }
 
 };
+
+export const polynomialProduct = (p1: Polynomial, p2: Polynomial) => {
+    if (p1.coefficients == [new Complex(0,0)] || p2.coefficients == [new Complex(0,0)])
+        return new Polynomial([new Complex(0,0)]);
+    const n = p1.degree+p2.degree+1;
+    let p = complexZeros(n);
+    for (let i = 0; i <= p1.degree; i++)
+        for (let j = 0; j <= p2.degree; j++) {
+            p[i+j] = complexSum(p[i+j], complexProduct(p1.coefficients[p1.degree-i], p2.coefficients[p2.degree-j]));
+        }
+    return new Polynomial(p);
+}
