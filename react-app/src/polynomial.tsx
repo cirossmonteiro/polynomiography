@@ -56,7 +56,7 @@ export class Polynomial {
     
     print = () => {
         let g = this.coefficients.length-1;
-        return this.coefficients.map((c,i) => `${c.print()}x^${g-i}`).reduce((ac, now) => ac+'+'+now,'');
+        return this.coefficients.map((c,i) => `${c.print()}${(g-i != 0 ? `x${(g-i != 1 ? `^${g-i}` : '')}` : '')}`).reduce((ac, now) => ac+'+'+now,'');
     }
 
 };
@@ -68,7 +68,8 @@ export const polynomialProduct = (p1: Polynomial, p2: Polynomial) => {
     let p = complexZeros(n);
     for (let i = 0; i <= p1.degree; i++)
         for (let j = 0; j <= p2.degree; j++) {
-            p[i+j] = complexSum(p[i+j], complexProduct(p1.coefficients[p1.degree-i], p2.coefficients[p2.degree-j]));
+            const ii = p1.degree-i, jj = p2.degree-j;
+            p[ii+jj] = complexSum(p[ii+jj], complexProduct(p1.coefficients[ii], p2.coefficients[jj]));
         }
     return new Polynomial(p);
 }

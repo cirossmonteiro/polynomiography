@@ -39,15 +39,13 @@ class Graphics extends React.Component<IProps, IState> {
         roots.forEach(root =>
             f = polynomialProduct(f, new Polynomial([new Complex(1,0), complexProduct(new Complex(-1,0), root)]))
         );
-        console.log(4343);
         let Z = zeros(width).map(() => complexZeros(height));
         for (let i = 0; i < width; i++) {
-            console.log(45,i);
-            //console.time('j-loop');
+            console.log(44,i);
             for (let j = 0; j < height; j++) {
                 const x = axis[0]+dx*i, y = axis[2]+dy*j;
                 const z = new Complex(x,y);
-                const L = orbit(f,m,z,n); // ta produzindo muito NaN
+                const L = orbit(f,m,z,n);
                 const w = L[L.length-1];
                 if ((f.compute(w) as Complex).norm() < 0.1) {
                     for (let k = 0; k < roots.length; k++) {
@@ -58,7 +56,6 @@ class Graphics extends React.Component<IProps, IState> {
                     }
                 }
             }
-            //console.timeEnd('j-loop');
         }
         console.log(Z);
         for (let i = 0; i < width; i++) {
@@ -134,8 +131,10 @@ class Graphics extends React.Component<IProps, IState> {
     basicDraw = () => {
         const { polynomial, axis, thickness } = this.props;
         //this.drawPolynomial(new Polynomial(polynomial.map(x => new Complex(x,0))), axis, thickness);
+        console.time('draw');
         this.drawBasinAttr([new Complex(1,0), new Complex(-1,0),
             new Complex(0,1), new Complex(0,-1)], 2 , 8);
+        console.timeEnd('draw');
     }
 
     componentDidMount() {
