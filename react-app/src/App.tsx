@@ -23,6 +23,9 @@ interface IState {
     dimensions2: [number, number]
 }
 
+const dim: [number, number] = [400,400];
+const thick = 1;
+
 class App extends React.Component<IProps, IState> {
 
     constructor(props: IProps) {

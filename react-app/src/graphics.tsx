@@ -57,13 +57,6 @@ class Graphics extends React.Component<IProps, IState> {
 
     drawBasinAttr = (roots: Complex[], m: number, n: number) => {
         const { width, height, thickness, axis} = this.props;
-        const delta = thickness;
-        if (!this.canvasRef.current)
-            return;
-        const ctx = this.canvasRef.current.getContext("2d");
-        if (!ctx)
-            return;
-        var imgData = ctx.createImageData(width*delta, height*delta);
         const dx = (axis[1]-axis[0])/width, dy = (axis[3]-axis[2])/height;
         let f = new Polynomial([new Complex(1,0)]);
         roots.forEach(root =>
@@ -72,7 +65,6 @@ class Graphics extends React.Component<IProps, IState> {
         let Z = zeros(width).map(() => complexZeros(height));
         for (let i = 0; i < width; i++) {
             console.log(44,i);
-            this.setState({message: `computing: ${i/width*100}%`});
             for (let j = 0; j < height; j++) {
                 const x = axis[0]+dx*i, y = axis[2]+dy*j;
                 const z = new Complex(x,y);
@@ -88,74 +80,29 @@ class Graphics extends React.Component<IProps, IState> {
                 }
             }
         }
-        this.setState({message: "ploting..."});
-        //console.log(Z);
-        console.time('plot');
-        const axis2 = axisComplexDomain(Z);
-        console.log('Domain: ', axis);
-        console.log('Image: ', axis2);
-        for (let i = 0; i < width; i++) {
-            for (let j = 0; j < height; j++) {
-                const color = Z[i][j].rgb(axis2);
-                for (let k1 = 0; k1 < delta; k1++)
-                    for (let k2 = 0; k2 < delta; k2++) {
-                        const ind = 4*((i*delta+k1)*width*delta+(j*delta+k2));
-                        imgData.data[ind+0] = color[0];
-                        imgData.data[ind+1] = color[1];
-                        imgData.data[ind+2] = color[2];
-                        imgData.data[ind+3] = 255;
-                    }
-                
-            }
-        }
         roots.forEach(root => {
             const i = Math.floor((root.a-axis[0])/dx), j = Math.floor((root.b-axis[2])/dy);
-            for (let k1 = 0; k1 < delta; k1++) {
-                for (let k2 = 0; k2 < delta; k2++) {
-                    const ind = 4*((i*delta+k1)*width*delta+(j*delta+k2));
-                    imgData.data[ind+0] = 255;
-                    imgData.data[ind+1] = 255;
-                    imgData.data[ind+2] = 255;
-                    imgData.data[ind+3] = 255;
-                }
-            }
+            Z[i][j] = zero;
         });
-        this.setState({message: "done"});
-        console.timeEnd('plot');
-        console.log(74);
-        ctx.putImageData(imgData,0,0);
+        this.plot(Z);
     }
 
-    drawPolynomial = (p: Polynomial, axis: [number, number, number, number], thickness: number) => {
-        const { width, height} = this.props;
-        const delta = thickness;
-        if (!this.canvasRef.current)
-            return;
-        const ctx = this.canvasRef.current.getContext("2d");
-        if (!ctx)
-            return;
-        var imgData = ctx.createImageData(width*delta, height*delta);
+    drawPolynomial = (p: Polynomial) => {
+        const { width, height, axis} = this.props;
         const dx = (axis[1]-axis[0])/width, dy = (axis[3]-axis[2])/height;
+        let Z = zeros(width).map(() => complexZeros(height));
         for (let i = 0; i < width; i++)
             for (let j = 0; j < height; j++) {
                 const x = axis[0]+dx*i, y = axis[2]+dy*j;
                 const z = new Complex(x,y), fz = p.compute(z) as Complex;
-                const color = fz.rgb(axis);
-                for (let k1 = 0; k1 < delta; k1++)
-                    for (let k2 = 0; k2 < delta; k2++) {
-                        const ind = 4*((i*delta+k1)*width*delta+(j*delta+k2));
-                        imgData.data[ind+0] = color[0];
-                        imgData.data[ind+1] = color[1];
-                        imgData.data[ind+2] = color[2];
-                        imgData.data[ind+3] = 255;
-                    }
+                Z[i][j] = fz;
             }
-        ctx.putImageData(imgData,0,0);
+        this.plot(Z);
     }
 
     basicDraw = () => {
         const { polynomial, axis, thickness } = this.props;
-        this.drawPolynomial(new Polynomial(polynomial.map(x => new Complex(x,0))), axis, thickness);
+        this.drawPolynomial(new Polynomial(polynomial.map(x => new Complex(x,0))));
         console.time('draw');
         this.drawBasinAttr([new Complex(1,0), new Complex(-1,0),
             new Complex(0,1), new Complex(0,-1)], 2 , 8);
@@ -169,11 +116,10 @@ class Graphics extends React.Component<IProps, IState> {
 
     componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
         const { polynomial, axis, thickness } = this.props;
-        if(polynomial != prevProps.polynomial ||
+        /* if(polynomial != prevProps.polynomial ||
             axis != prevProps.axis ||
             thickness != prevProps.thickness)
-            this.basicDraw();
-
+            this.basicDraw(); */
     }
 
     render() {
