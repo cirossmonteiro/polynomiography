@@ -3,6 +3,8 @@ import { Polynomial, polynomialProduct } from './polynomial';
 import { Complex, one, zero, complexSub, complexProduct, complexZeros, axisComplexDomain } from './complex';
 import { orbit } from './polynomiography';
 import { zeros, min, max } from './utils';
+import WebWorker from './web_workers/workerSetup';
+import BasinAttr from './web_workers/BasinAttr';
 
 interface IProps {
     width: number,
@@ -13,17 +15,21 @@ interface IProps {
 }
 
 interface IState {
-    message: string
+    message?: string,
+    status?: number
 }
 
 class Graphics extends React.Component<IProps, IState> {
 
     private canvasRef: React.RefObject<HTMLCanvasElement>;
+    private w?: Worker;
+    worker?: WebWorker;
 
     constructor(props: IProps) {
         super(props);
         this.state = {
-            message: ""
+            message: "",
+            status: 0
         };
         this.canvasRef = React.createRef();
     }
@@ -56,7 +62,78 @@ class Graphics extends React.Component<IProps, IState> {
     }
 
     drawBasinAttr = (roots: Complex[], m: number, n: number) => {
-        const { width, height, thickness, axis} = this.props;
+        const { width, height, axis} = this.props;
+        console.log(60);
+        // const myWorker = () => {
+        //     postMessage({status: 0, data: 'worker started'});
+        // };
+        // let code = myWorker.toString();
+        // code = code.substring(code.indexOf("{")+1, code.lastIndexOf("}"));
+        // const blob = new Blob([code], {type: "application/javascript"});
+        //const worker = new Worker(URL.createObjectURL(blob));
+        this.worker = new WebWorker(BasinAttr);
+        //this.worker.postMessage("none");
+        console.log(76, JSON.stringify({
+            roots: roots,
+            m: m,
+            n: n,
+            width: width,
+            height: height,
+            axis: axis
+        }));
+        this.worker.postMessage(JSON.stringify({
+            roots: roots,
+            m: m,
+            n: n,
+            width: width,
+            height: height,
+            axis: axis
+        }));
+        this.worker.addEventListener('message', (event: { data: any; }) => {
+            let response = event.data;
+            console.log(86, response.message);
+            for (let key in response) {
+                this.setState({[key]: response[key]});
+            }
+		});
+
+        // worker.onmessage = (m) => {
+        // console.log("msg", m.data.foo);
+        // };
+        // //this.w = new Worker("BasinAttr.tsx");
+        // console.log(61);
+        // w.postMessage({
+        //     roots: roots,
+        //     m: m,
+        //     n: n,
+        //     width: width,
+        //     height: height,
+        //     axis: axis
+        // });
+        // console.log(61.5);
+        // myWorker.addEventListener('message', (event: {data: any}) => {
+        //     console.log(62);
+        //     let message = event.data;
+        //     if (message.status == 1) {
+        //         this.plot(message.data);
+        //         (this.w as Worker).terminate();
+        //     }
+        //     else if (message.status == 0) {
+        //         console.log(68, message.data);
+        //     }
+        // });
+        /* this.w.addEventListener('message', event => {
+            console.log(62);
+            let message = event.data;
+            if (message.status == 1) {
+                this.plot(message.data);
+                (this.w as Worker).terminate();
+            }
+            else if (message.status == 0) {
+                console.log(68, message.data);
+            }
+        }); */
+        /* const { width, height, thickness, axis} = this.props;
         const dx = (axis[1]-axis[0])/width, dy = (axis[3]-axis[2])/height;
         let f = new Polynomial([new Complex(1,0)]);
         roots.forEach(root =>
@@ -84,7 +161,7 @@ class Graphics extends React.Component<IProps, IState> {
             const i = Math.floor((root.a-axis[0])/dx), j = Math.floor((root.b-axis[2])/dy);
             Z[i][j] = zero;
         });
-        this.plot(Z);
+        this.plot(Z); */
     }
 
     drawPolynomial = (p: Polynomial) => {

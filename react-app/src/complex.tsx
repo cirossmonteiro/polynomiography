@@ -11,7 +11,7 @@ export class Complex {
         this.b = b;
     }
 
-    norm = () => Math.sqrt(this.a**2+this.b**2);
+    norm = () => (this.a**2+this.b**2)**0.5;
 
     conjugate = () => new Complex(this.a, -this.b);
 
@@ -37,9 +37,9 @@ export class Complex {
 
 };
 
-export const one = new Complex(1,0);
+export let one = new Complex(1,0);
 
-export const zero = new Complex(0,0);
+export let zero = new Complex(0,0);
 
 export const complexSum = (x: Complex, y: Complex) => new Complex(x.a+y.a, x.b+y.b);
 

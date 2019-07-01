@@ -1,11 +1,11 @@
-import { Complex } from "./complex";
-
 export const zeros = (num: number) => Array.from(Array(num),() => 0);
 
 
 // source: https://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
 export const RGB2HSL = (r: number, g: number, b: number) => {
-    r /= 255, g /= 255, b /= 255;
+    r /= 255;
+    g /= 255;
+    b /= 255;
     var max = Math.max(r, g, b), min = Math.min(r, g, b);
     var h = 0, s = 0, l = (max + min) / 2;
 
